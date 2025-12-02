@@ -1,0 +1,7 @@
+fastapi
+uvicorn[standard]
+httpx
+
+ddtrace
+datadog
+datadog-api-client
