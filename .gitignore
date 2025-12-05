@@ -209,3 +209,5 @@ __marimo__/
 api/Scripts
 api/Include
 api/pyvenv.cfg
+
+*.env

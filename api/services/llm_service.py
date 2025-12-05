@@ -1,7 +1,7 @@
 import os
 import httpx
-from instrumentation.datadog_metrics import llm_metrics
-from instrumentation.datadog_tracing import traced
+from services.datadog_service import llm_metrics
+from utils.tracing import traced
 
 LLM_URL = os.getenv("VERTEX_AI_URL")
 

@@ -3,7 +3,7 @@ from services.llm_service import call_llm
 
 router = APIRouter()
 
-@router.post("/predict")
-async def predict(payload: dict):
+@router.post("/chat")
+async def chat(payload: dict):
     response = await call_llm(payload)
     return {"result": response}

@@ -1,0 +1,32 @@
+version: '3.8'
+services:
+  datadog:
+    image: datadog/agent:latest
+    env_file:
+      - ./datadog.env
+    ports:
+      - "8125:8125/udp"   # DogStatsD
+      - "8126:8126/tcp"   # trace agent (optional)
+    volumes:
+    - /var/run/docker.sock:/var/run/docker.sock:ro
+    - /proc/:/host/proc/:ro
+    - /sys/fs/cgroup/:/host/sys/fs/cgroup:ro
+    networks:
+      - dd-net
+
+  web:
+    build: .
+    command: uvicorn main:app --host 0.0.0.0 --port 8000
+    environment:
+      - DD_AGENT_HOST=datadog-1
+      - DD_PORT=8125
+    depends_on:
+      - datadog
+    ports:
+      - "8000:8000"
+    networks:
+      - dd-net
+
+networks:
+  dd-net:
+    driver: bridge
