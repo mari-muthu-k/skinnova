@@ -1,6 +1,7 @@
 version: '3.8'
 services:
   datadog:
+    container_name: skinnova-datadog
     image: datadog/agent:latest
     env_file:
       - ./datadog.env
@@ -14,11 +15,12 @@ services:
     networks:
       - dd-net
 
-  web:
+  api:
+    container_name: skinnova-api
     build: .
     command: uvicorn main:app --host 0.0.0.0 --port 8000
     environment:
-      - DD_AGENT_HOST=datadog-1
+      - DD_AGENT_HOST=skinnova-datadog
       - DD_PORT=8125
     depends_on:
       - datadog
