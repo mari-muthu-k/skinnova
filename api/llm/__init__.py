@@ -17,6 +17,6 @@ class LLM:
         return response
 
 if os.getenv("LLM_MODEL") and os.getenv("GOOGLE_APPLICATION_CREDENTIALS"):
-    skinnovaLLM = LLM(model_name=os.getenv("LLM_MODEL"),token=os.getenv("GOOGLE_APPLICATION_CREDENTIALS"))
+    skinnovaLLM = LLM(model_name=os.getenv("LLM_MODEL"))
 else:
     raise EnvironmentError("LLM_MODEL and GOOGLE_APPLICATION_CREDENTIALS must be set in environment variables.")
