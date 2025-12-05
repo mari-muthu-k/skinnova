@@ -19,9 +19,8 @@ services:
     container_name: skinnova-api
     build: .
     command: uvicorn main:app --host 0.0.0.0 --port 8000
-    environment:
-      - DD_AGENT_HOST=skinnova-datadog
-      - DD_PORT=8125
+    env_file:
+      - ./api.env
     depends_on:
       - datadog
     ports:
