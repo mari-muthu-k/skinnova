@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Send, Heart, MessageSquare } from "lucide-react";
-import landingPageImage from "../assets/landingpage3.webp";
+import landingPageImage from "../assets/landingpage.webp";
 
 const handleKeyPress = (
   e: React.KeyboardEvent<HTMLInputElement>,
