@@ -211,3 +211,5 @@ api/Include
 api/pyvenv.cfg
 
 *.env
+credentials
+*-sa.json

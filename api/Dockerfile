@@ -2,4 +2,4 @@ FROM python:3.13-slim
 WORKDIR /app
 COPY . /app/
 RUN rm datadog-dashboard.json docker-compose.yml
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install -r requirements.txt

@@ -1,9 +1,11 @@
 from fastapi import APIRouter
-from services.llm_service import call_llm
+from services.llm_service import llm_chat
+from utils.ai_msg import get_last_ai_message
 
 router = APIRouter()
 
 @router.post("/chat")
-async def chat(payload: dict):
-    response = await call_llm(payload)
-    return {"result": response}
+async def chat_llm(payload: dict):
+    response = await llm_chat(payload)
+    ai_message = get_last_ai_message(response)
+    return {"result": ai_message}
