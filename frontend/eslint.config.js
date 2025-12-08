@@ -23,11 +23,11 @@ export default [
       "jsx-a11y": jsxA11y
     },
     rules: {
-      "react/react-in-jsx-scope": "off", // React 17+
+      "react/react-in-jsx-scope": "off",
       "react-hooks/rules-of-hooks": "error",
-      "react-hooks/exhaustive-deps": "warn",
+      "react-hooks/exhaustive-deps": "error",
       "jsx-a11y/alt-text": "warn",
-      "@typescript-eslint/no-unused-vars": "warn"
+      "@typescript-eslint/no-unused-vars": "error"
     },
     settings: {
       react: {
