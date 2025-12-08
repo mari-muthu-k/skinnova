@@ -5,3 +5,5 @@ httpx
 ddtrace
 datadog
 datadog-api-client
+langchain_google_genai
+langchain
