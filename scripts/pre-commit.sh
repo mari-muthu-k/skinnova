@@ -19,11 +19,11 @@ changed_files=$(git diff --cached --name-only "$against")
 echo "$changed_files" | grep -q '^frontend/'
 
 if [ $? -ne 0 ]; then
-  echo "✅ No frontend files changed — skipping Husky."
+  echo "No frontend files changed — skipping Husky."
   exit 0
 fi
 
-echo "🚀 Frontend files changed — running frontend Husky..."
+echo "Frontend files changed — running frontend Husky..."
 
 # Run Husky from inside frontend
 (
