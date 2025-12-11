@@ -36,7 +36,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
-          file: ./api/Dockerfile
+          command: cd api && docker build
           push: true
           platforms: linux/amd64
           no-cache: true
