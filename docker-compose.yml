@@ -33,6 +33,7 @@ services:
   frontend:
     container_name: skinnova-frontend
     image: ghcr.io/mari-muthu-k/skinnova:frontend-latest
+    command : cp -a /app/. /frontend/
     env_file:
       - ./env/frontend.env
     depends_on:
@@ -40,11 +41,13 @@ services:
     networks:
       - dd-net
     volumes:
-      - ./skinnova-frontend:/app
+      - ./frontend-build:/frontend
 
   nginx:
     container_name: skinnova-nginx
     image: ghcr.io/mari-muthu-k/skinnova:nginx-latest
+    environment:
+            - CERTBOT_EMAIL=contact@skinnova.beauty
     ports:
       - "80:80"
       - "443:443"
@@ -54,7 +57,7 @@ services:
     networks:
       - dd-net
     volumes:
-      - ./skinnova-frontend:/app
+      - ./frontend-build:/app
 networks:
   dd-net:
     driver: bridge

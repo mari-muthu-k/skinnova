@@ -213,3 +213,5 @@ api/pyvenv.cfg
 *.env
 credentials
 *-sa.json
+env/
+frontend-build/

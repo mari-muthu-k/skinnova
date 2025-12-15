@@ -6,4 +6,5 @@ COPY . .
 RUN npm run build
 
 FROM alpine AS production
-COPY --from=build /app/build /app
+WORKDIR /app
+COPY --from=build /app/dist ./
