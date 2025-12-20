@@ -20,19 +20,15 @@ export interface RoutineData {
   night_routine: RoutineStep[];
 }
 
-export interface TextContent {
-  type: "text";
-  data: string;
-}
 
 export interface RoutineContent {
   type: "routine";
   data: RoutineData;
 }
 
-export type MessageContent = TextContent | RoutineContent;
+export type MessageContent = string | RoutineContent;
 
 export interface Message {
-  sender: "user" | "bot";
+  role : "human" | "ai";
   content: MessageContent;
 }
