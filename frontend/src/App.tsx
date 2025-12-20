@@ -2,15 +2,13 @@ import { useState, useRef, useEffect } from "react";
 import { AnimatePresence } from "framer-motion";
 import type {
   Message,
-  MessageContent,
   Profile,
   RoutineStep,
-  TextContent,
 } from "./entities/types";
-import { mockRoutineResponse } from "./mocks/routineData";
 import ChatbotScreen from "./components/ChatbotScreen";
 import LandingScreen from "./components/LandingScreen";
 import RoutineDetailModal from "./components/RoutineDetailModal";
+import { chatLLM } from "./services/api";
 
 const App: React.FC = () => {
   const [isChatting, setIsChatting] = useState<boolean>(false);
@@ -51,69 +49,27 @@ const App: React.FC = () => {
     setCurrentProfile(null);
   };
 
-  const handleStartChat = () => {
-    if (!landingInput.trim()) return;
+  const sendMessage = (msg: string) => {
+    if (!msg.trim()) return;
 
     const userMsg: Message = {
-      sender: "user",
-      content: { type: "text", data: landingInput },
+      role: "human",
+      content: msg ,
     };
-    setMessages([userMsg]);
-    setLandingInput("");
-    setInput("");
+    setInput('');
+    setMessages((prev) => [...prev,  userMsg]);
     setIsChatting(true);
     setIsTyping(true);
 
-    setTimeout(() => {
-      const botResponse: TextContent = {
-        type: "text",
-        data: "Welcome! Based on your general query, here is a recommended routine for Combination skin. Click on any step for details.",
-      };
-
-      setMessages((prev) => [...prev, { sender: "bot", content: botResponse }]);
+    chatLLM(userMsg).then((response)=>{
+      setMessages((prev) => [...prev, { role : "ai", content: response }]);
+    }).catch((error)=>{
+      console.error("LLM chat error:", error);
+      setMessages((prev) => [...prev, { role : "ai", content: "Sorry, something went wrong. Please try again later." }]);
+    }).finally(()=>{
       setIsTyping(false);
-
-      setTimeout(() => {
-        setIsTyping(true);
-        setTimeout(() => {
-          setMessages((prev) => [
-            ...prev,
-            { sender: "bot", content: mockRoutineResponse },
-          ]);
-          setIsTyping(false);
-        }, 1500);
-      }, 1000);
-    }, 1500);
-  };
-
-  const sendMessage = () => {
-    if (!input.trim() || isTyping) return;
-
-    const userMsg: Message = {
-      sender: "user",
-      content: { type: "text", data: input },
-    };
-    setMessages((prev) => [...prev, userMsg]);
-    const userQuery = input;
-    setInput("");
-    setIsTyping(true);
-
-    setTimeout(() => {
-      const isRoutineQuery = userQuery.toLowerCase().includes("routine");
-      let botContent: MessageContent;
-
-      if (isRoutineQuery) {
-        botContent = mockRoutineResponse;
-      } else {
-        botContent = {
-          type: "text",
-          data: "Thanks for your question! I'm ready to find your perfect routine. Ask me for a 'routine' to see the structured display and click the boxes for step details.",
-        };
-      }
-
-      setMessages((prev) => [...prev, { sender: "bot", content: botContent }]);
-      setIsTyping(false);
-    }, 1500);
+    });
+    
   };
 
   return (
@@ -146,7 +102,7 @@ const App: React.FC = () => {
               key="landing"
               landingInput={landingInput}
               setLandingInput={setLandingInput}
-              handleStartChat={handleStartChat}
+              handleStartChat={sendMessage}
             />
           )}
         </AnimatePresence>
