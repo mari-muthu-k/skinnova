@@ -6,15 +6,18 @@ from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from webhooks import datadog_incident
 
+from utils.cors import get_cors_origins
+
 app = FastAPI(title="SkinNova LLM Backend with Datadog Observability", version="1.0.0",openapi_url="",root_path="/api/v1")
 
 #Todo : add startup and shutdown events for db connections etc
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[os.getenv("CORS_ALLOW_ORIGINS").split(",")],
-    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allow_headers=["Content-Type","Content-Length"],
+    allow_origins=get_cors_origins(),
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 app.include_router(llm.router, prefix="/llm")
