@@ -34,8 +34,6 @@ services:
     container_name: skinnova-frontend
     command : cp -a /app/. /frontend/
     build: ./frontend
-    env_file:
-      - ./env/frontend.env
     depends_on:
       - api
     networks:
@@ -47,9 +45,8 @@ services:
     container_name: skinnova-nginx
     build: ./nginx/local
     ports:
-      - "80:80"
+      - "8001:80"
     depends_on:
-      - frontend
       - api
     networks:
       - dd-net

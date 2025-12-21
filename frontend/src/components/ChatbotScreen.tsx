@@ -18,7 +18,7 @@ interface ChatbotScreenProps {
   isTyping: boolean;
   input: string;
   setInput: React.Dispatch<React.SetStateAction<string>>;
-  sendMessage: () => void;
+  sendMessage: (msg : string) => void;
   openModal: (step: RoutineStep, warnings: string[], profile: Profile) => void;
   chatRef: React.RefObject<HTMLDivElement | null>;
 }
@@ -31,7 +31,10 @@ const ChatbotScreen: React.FC<ChatbotScreenProps> = ({
   sendMessage,
   openModal,
   chatRef,
-}) => (
+}) => {
+
+  return (
+
   <motion.div
     initial={{ opacity: 0, x: 50 }}
     animate={{ opacity: 1, x: 0 }}
@@ -57,7 +60,7 @@ const ChatbotScreen: React.FC<ChatbotScreenProps> = ({
         {messages.map((msg, index) => (
           <ChatBubble
             key={index}
-            sender={msg.sender}
+            role={msg.role}
             content={msg.content}
             openModal={openModal}
           />
@@ -76,7 +79,7 @@ const ChatbotScreen: React.FC<ChatbotScreenProps> = ({
         <input
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          onKeyDown={(e) => handleKeyPress(e, sendMessage)}
+          onKeyDown={(e) => handleKeyPress(e, () => sendMessage(input))}
           type="text"
           placeholder="Ask the AI"
           className="bg-transparent outline-none w-full text-sm"
@@ -84,7 +87,7 @@ const ChatbotScreen: React.FC<ChatbotScreenProps> = ({
       </div>
 
       <button
-        onClick={sendMessage}
+        onClick={() => sendMessage(input)}
         disabled={isTyping}
         className={`w-12 h-12 flex items-center justify-center rounded-full transition ${
           input.trim()
@@ -101,6 +104,7 @@ const ChatbotScreen: React.FC<ChatbotScreenProps> = ({
       </button>
     </div>
   </motion.div>
-);
+  );
+};
 
 export default ChatbotScreen;

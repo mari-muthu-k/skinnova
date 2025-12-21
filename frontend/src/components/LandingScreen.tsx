@@ -1,27 +1,21 @@
 import { motion } from "framer-motion";
 import { Send, Heart, MessageSquare } from "lucide-react";
 import landingPageImage from "../assets/landingpage.webp";
+import { useState } from "react";
 
-const handleKeyPress = (
-  e: React.KeyboardEvent<HTMLInputElement>,
-  handler: () => void
-): void => {
-  if (e.key === "Enter") {
-    handler();
-  }
-};
 
 interface LandingScreenProps {
   landingInput: string;
   setLandingInput: React.Dispatch<React.SetStateAction<string>>;
-  handleStartChat: () => void;
+  handleStartChat: (msg:string) => void;
 }
 
 const LandingScreen: React.FC<LandingScreenProps> = ({
-  landingInput,
-  setLandingInput,
   handleStartChat,
-}) => (
+}) => {
+  const [landingInput, setLandingInput] = useState("");
+
+  return (
   <motion.div
     initial={{ opacity: 0, scale: 0.9 }}
     animate={{ opacity: 1, scale: 1 }}
@@ -57,14 +51,13 @@ const LandingScreen: React.FC<LandingScreenProps> = ({
           <input
             value={landingInput}
             onChange={(e) => setLandingInput(e.target.value)}
-            onKeyDown={(e) => handleKeyPress(e, handleStartChat)}
             type="text"
             placeholder="Type something..."
             className="bg-transparent outline-none w-full text-sm p-1"
             autoFocus
           />
           <button
-            onClick={handleStartChat}
+            onClick={() => handleStartChat(landingInput)}
             className="ml-2 w-8 h-8 flex items-center justify-center rounded-lg bg-black text-white hover:bg-rose-600 transition"
             aria-label="Start chat"
           >
@@ -86,6 +79,7 @@ const LandingScreen: React.FC<LandingScreenProps> = ({
       />
     </div>
   </motion.div>
-);
+  )
+};
 
 export default LandingScreen;
