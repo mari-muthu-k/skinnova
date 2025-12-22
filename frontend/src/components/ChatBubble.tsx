@@ -41,8 +41,6 @@ const ChatBubble: React.FC<ChatBubbleProps> = ({
       night_routine: routinePayload.night_routine || [],
     };
   }
-  console.log("Routine Payload:", routinePayload);
-  console.log("Normalized Routine:", normalizedRoutine);
 
   const alignment = isUser ? "justify-end" : "justify-start";
   const bubbleClasses = isUser
