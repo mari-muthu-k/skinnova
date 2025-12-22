@@ -1,6 +1,4 @@
 import os
-from langchain_google_genai import ChatGoogleGenerativeAI
-from langchain.agents import create_agent
 from utils.file import return_file_contents
 import vertexai 
 from vertexai.generative_models import GenerativeModel, GenerationResponse
