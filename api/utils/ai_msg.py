@@ -1,3 +1,4 @@
+from vertexai.generative_models import GenerationResponse
 
 def get_last_ai_message(res:dict)->str:
         msgs = res['messages']
@@ -8,3 +9,6 @@ def get_last_ai_message(res:dict)->str:
                 return msg['content']
         
         return "sorry! ai did not respond."
+
+def get_vertex_ai_message(res:GenerationResponse)->str:
+        return res.text
