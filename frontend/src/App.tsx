@@ -1,10 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { AnimatePresence } from "framer-motion";
-import type {
-  Message,
-  Profile,
-  RoutineStep,
-} from "./entities/types";
+import type { Message, Profile, RoutineStep } from "./entities/types";
 import ChatbotScreen from "./components/ChatbotScreen";
 import LandingScreen from "./components/LandingScreen";
 import RoutineDetailModal from "./components/RoutineDetailModal";
@@ -54,33 +50,38 @@ const App: React.FC = () => {
 
     const userMsg: Message = {
       role: "human",
-      content: msg ,
+      content: msg,
     };
-    setInput('');
-    setMessages((prev) => [...prev,  userMsg]);
+    setInput("");
+    setMessages((prev) => [...prev, userMsg]);
     setIsChatting(true);
     setIsTyping(true);
 
-    chatLLM(userMsg).then((response)=>{
-      setMessages((prev) => [...prev, { role : "ai", content: response }]);
-    }).catch((error)=>{
-      console.error("LLM chat error:", error);
-      setMessages((prev) => [...prev, { role : "ai", content: "Sorry, something went wrong. Please try again later." }]);
-    }).finally(()=>{
-      setIsTyping(false);
-    });
-    
+    chatLLM(userMsg)
+      .then((response) => {
+        setMessages((prev) => [...prev, { role: "ai", content: response }]);
+      })
+      .catch((error) => {
+        console.error("LLM chat error:", error);
+        setMessages((prev) => [
+          ...prev,
+          {
+            role: "ai",
+            content: "Sorry, something went wrong. Please try again later.",
+          },
+        ]);
+      })
+      .finally(() => {
+        setIsTyping(false);
+      });
   };
 
   return (
     <div className="h-screen w-full flex items-center justify-center p-4 md:p-10 font-sans">
       <div
-        className="absolute inset-0 bg-cover bg-center"
+        className="absolute inset-0"
         style={{
-          backgroundImage: `url('https://placehold.co/1200x800/f5e3df/333?text=Skincare+Transformation+Background')`,
-          backgroundSize: "cover",
-          backgroundRepeat: "no-repeat",
-          opacity: 0.4,
+          backgroundColor: `#f5e3df`,
         }}
       />
 
