@@ -2,9 +2,6 @@ fastapi
 uvicorn[standard]
 httpx
 
-ddtrace
 datadog
-datadog-api-client
-langchain-google-genai==3.2.0
-langchain==1.1.2
 ddtrace
+vertexai
