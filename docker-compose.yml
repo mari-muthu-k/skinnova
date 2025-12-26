@@ -58,6 +58,7 @@ services:
       - dd-net
     volumes:
       - ./frontend-build:/app
+      - ./ssl:/etc/letsencrypt
 networks:
   dd-net:
     driver: bridge
