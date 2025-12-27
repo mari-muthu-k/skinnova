@@ -1,16 +1,29 @@
-import os
 from fastapi import FastAPI, Request
 from routers import health, llm
 from utils.exception_handler import ExceptionBase 
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from webhooks import datadog_incident
+from datadog_agent import datadog_agent
+from contextlib import asynccontextmanager
 
 from utils.cors import get_cors_origins
 
-app = FastAPI(title="SkinNova LLM Backend with Datadog Observability", version="1.0.0",openapi_url="",root_path="/api/v1")
 
-#Todo : add startup and shutdown events for db connections etc
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    print("Application is starting...")
+    yield
+    print("Application is shutting down...")
+    datadog_agent.close_socket()
+
+app = FastAPI(title="SkinNova LLM Backend with Datadog Observability", 
+                version="1.0.0",
+                openapi_url="",
+                root_path="/api/v1",
+                lifespan=lifespan
+            )
 
 app.add_middleware(
     CORSMiddleware,
