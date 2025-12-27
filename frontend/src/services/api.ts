@@ -14,10 +14,10 @@ const api = axios.create({
   },
 });
 
-async function chatLLM(prompt: Message): Promise<string> {
+async function chatLLM(prompt: Message[]): Promise<string> {
   try {
     var langPrompt = {
-      messages: [prompt],
+      messages: prompt,
     };
     const response = await api.post("/llm/chat", langPrompt);
     if (response.status !== 200) {
