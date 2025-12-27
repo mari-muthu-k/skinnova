@@ -11,9 +11,7 @@ class LLM:
           location=os.getenv("LLM_REGION")
        )
 
-        print("Loading system prompt for skin care assistant...")
         system_prompt = return_file_contents(prompt_path)
-        print("System prompt loaded.")
 
         self.chat_model = GenerativeModel(model_name=model_name,system_instruction=system_prompt)
 
@@ -26,6 +24,8 @@ class LLM:
         return response
 
 if os.getenv("LLM_PROJECT_NAME") and  os.getenv("LLM_REGION") and os.getenv("LLM_MODEL") and os.getenv("GOOGLE_APPLICATION_CREDENTIALS") and os.getenv("SYSTEM_PROMPT_PATH"):
+    print("Initializing Skinnova LLM...")
     skinnovaLLM = LLM(model_name=os.getenv("LLM_MODEL"),prompt_path=os.getenv("SYSTEM_PROMPT_PATH"))
+    print("Skinnova LLM initialized.")
 else:
     raise EnvironmentError("All LLM environment variables must be set.")
