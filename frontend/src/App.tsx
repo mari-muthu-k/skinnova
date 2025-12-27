@@ -52,12 +52,13 @@ const App: React.FC = () => {
       role: "human",
       content: msg,
     };
+    const newMessages: Message[] = [...messages, userMsg];
     setInput("");
-    setMessages((prev) => [...prev, userMsg]);
+    setMessages(newMessages);
     setIsChatting(true);
     setIsTyping(true);
 
-    chatLLM(userMsg)
+    chatLLM(newMessages)
       .then((response) => {
         setMessages((prev) => [...prev, { role: "ai", content: response }]);
       })
