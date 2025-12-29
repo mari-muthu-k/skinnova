@@ -1,15 +1,15 @@
 import json
-
+from models.user import User
 
 def contains_any(text: str, terms: set[str]) -> bool:
     text = text.lower()
     return any(term in text for term in terms)
 
 
-def routine_generated_too_early(answer: str, profile: dict) -> bool:
-    required = ["age", "skin_type", "concerns"]
-    missing = [k for k in required if not profile.get(k)]
-    return bool(missing) and '"morning_routine"' in answer
+def is_profile_partial(profile: User) -> bool:
+    if profile.Concerns is None or len(profile.Concerns) == 0 or profile.Age is None or profile.SkinType is None:
+        return True
+    return False
 
 
 def extract_ingredients(text: str, ingredients: set[str]) -> list[str]:
