@@ -18,6 +18,7 @@ def get_vertex_ai_message(res:GenerationResponse)->LLMResponse:
           llmRes = LLMResponse(**resDict)
           return llmRes
         except Exception as e:
-          print(f"Error parsing LLM response: {res.text}")
+          print("Error parsing LLM response")
+          print(res)
           print(e)
-          return LLMResponse(type="error", data={"error": f"Error parsing LLM response: {res.text}"})
+          return LLMResponse(type="error", data={"response": "something went wrong"})
