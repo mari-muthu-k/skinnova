@@ -36,9 +36,9 @@ class UserPersonaMetrics:
         "llm.hallucination.persona_risk_weight",
         risk_weight,
         tags=[
-            f"user.age_bucket:{self.get_age_bucket(user.age)}",
-            f"user.skin_type:{user.skin_type}",
-            f"user.skin_concern:{user.skin_concern}",
+            f"user.age_bucket:{self.get_age_bucket(user.Age)}",
+            f"user.skin_type:{user.SkinType}",
+            f"user.skin_concern:{user.Concerns}",
         ]
       )
      
