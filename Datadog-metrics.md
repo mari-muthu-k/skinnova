@@ -2,7 +2,7 @@
 ### Our dashboards observe not just hallucinations, but the decision to evaluate them and the persona-weighted blast radius they create in production.
 
 
-## GROUP 1 — **Evaluation Decision Observability **
+## GROUP 1 — Evaluation Decision Observability
 
 > *Observability of **when and why** hallucination evaluation happens*
 
@@ -36,17 +36,17 @@
 * **Chart type:** Stacked Bar (or Area)
 * **Metrics:**
 
-  * `llm.prefilter.medical_claim.count`
-  * `llm.prefilter.absolute_claim.count`
-  * `llm.prefilter.brand_violation.count`
-  * `llm.prefilter.unsafe_ingredient.count`
-  * `llm.prefilter.premature_routine.count`
-  * `llm.prefilter.json_format_violation.count`
+  * `llm.prefilter.trigger.medical_claim.count`
+  * `llm.prefilter.trigger.absolute_claim.count`
+  * `llm.prefilter.trigger.brand_violation.count`
+  * `llm.prefilter.trigger.unsafe_ingredient.count`
+  * `llm.prefilter.trigger.premature_routine.count`
+  * `llm.prefilter.trigger.json_format_violation.count`
 * **Purpose:** Explains *why* certain prompts enter evaluation
 
 ---
 
-## GROUP 2 — **Hallucination Detection Metrics**
+## GROUP 2 — Hallucination Detection Metrics
 
 ### Panel 2.1 — Hallucination Score Over Time
 
@@ -82,7 +82,7 @@
 
 ---
 
-## GROUP 3 — **Hallucination Blast Radius**
+## GROUP 3 — Hallucination Blast Radius
 
 ### Panel 3.1 — Hallucination Blast Radius Index (HBRS)
 
@@ -126,7 +126,7 @@
 
 ---
 
-## GROUP 4 — **SLOs, Alerts & Runbooks**
+## GROUP 4 — SLOs, Alerts & Runbooks
 
 ### Panel 4.1 — Hallucination Blast Radius SLO
 
@@ -166,7 +166,7 @@
 
 ---
 
-## GROUP 5 — **Executive Summary**
+## GROUP 5 — Executive Summary
 
 ### Panel 5.1 — KPI Tiles
 

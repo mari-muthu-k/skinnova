@@ -10,8 +10,7 @@ async def llm_chat(payload: dict):
         res = skinnovaLLM.vertex_chat(payload)
         recent_user_msgs = get_recent_user_message(payload)
 
-        api_metrics.send_metric("user_messages", 1)
-        llm_metrics.logging_event("llm_chat_called")
+        llm_metrics.logging_event("chats.total",1)
         try: 
                 # Check if hallucination detection is required
                 prefilter_result = skinnova_prefilter(res.text)
