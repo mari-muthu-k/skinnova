@@ -4,7 +4,7 @@ class HallucinationResult:
     category : str
     error : str = ""
 
-    def __init__(self, hallucination_score: float, reason: str, category: str, error: str = "") -> None:
+    def __init__(self, hallucination_score: float = 0, reason: str = "", category: str = "", error: str = "") -> None:
         self.hallucination_score = hallucination_score
         self.reason = reason
         self.category = category
