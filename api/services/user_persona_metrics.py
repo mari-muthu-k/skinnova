@@ -12,7 +12,7 @@ class UserPersonaMetrics:
     def __init__(self):
         self.datadog_statsd = datadog_agent
     
-    def get_age_bucket(age:int)->str:
+    def get_age_bucket(self,age:int)->str:
         if age <= 12:
             return "0-12"
         elif age <= 18:
