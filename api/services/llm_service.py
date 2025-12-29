@@ -28,8 +28,10 @@ async def llm_chat(payload: dict)->LLMResponse:
                    hallucination = hallucination_detector.detect_hallucination(recent_user_msgs, llm_response.Data.Response) 
                    llm_metrics.log_hallucination(hallucination)
 
-                   if hallucination.hallucination_score > 0.5 and llm_response.Data.Profile is not None:
-                          user_persona_metrics.emit_persona_risk(llm_response.Data.Profile)
+                   if hallucination.hallucination_score > 0.5:
+                        if llm_response.Data.Profile is not None:
+                          user_persona_metrics.emit_persona_risk(llm_response.Data.Profile)                     
+                         
 
 
         except Exception as e:
