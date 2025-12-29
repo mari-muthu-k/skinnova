@@ -41,3 +41,5 @@ class UserPersonaMetrics:
             f"user.skin_concern:{user.skin_concern}",
         ]
       )
+     
+user_persona_metrics = UserPersonaMetrics()
