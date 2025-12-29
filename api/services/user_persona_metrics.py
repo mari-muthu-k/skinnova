@@ -26,7 +26,9 @@ class UserPersonaMetrics:
         else:
             return "50+"
         
-
+    def log_user_affected(self):
+         self.datadog_statsd.increment("llm.users.affected")
+    
     def emit_persona_risk(self, user : User):
      risk_weight = 0.0 
      for concern in user.Concerns:

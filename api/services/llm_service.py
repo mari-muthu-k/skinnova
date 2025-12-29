@@ -22,13 +22,14 @@ async def llm_chat(payload: dict)->LLMResponse:
                 prefilter_result = skinnova_prefilter(llm_response)
                 recent_user_msgs = get_recent_user_message(payload)
                 print(f"Prefilter result: Risk Score={prefilter_result.risk_score}, Triggers={prefilter_result.triggers}, Should Evaluate={prefilter_result.should_evaluate}")
+                llm_metrics.log_prefilter(prefilter_result.risk_score, prefilter_result.triggers)
                 if prefilter_result.should_evaluate:
                    print("Prefilter triggered hallucination detection.")
-                   llm_metrics.log_prefilter(prefilter_result.risk_score, prefilter_result.triggers)
                    hallucination = hallucination_detector.detect_hallucination(recent_user_msgs, llm_response.Data.Response) 
                    llm_metrics.log_hallucination(hallucination)
 
                    if hallucination.hallucination_score > 0.5:
+                        user_persona_metrics.log_user_affected()
                         if llm_response.Data.Profile is not None:
                           user_persona_metrics.emit_persona_risk(llm_response.Data.Profile)                     
                          

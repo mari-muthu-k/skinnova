@@ -68,6 +68,8 @@ def skinnova_prefilter(
 
     # Decision threshold (tuned for cost savings)
     should_evaluate = risk_score >= 0.25
+    if not should_evaluate:
+        triggers.append("safe")
 
     return PrefilterResult(
          should_evaluate=should_evaluate,
