@@ -1,4 +1,3 @@
-import json
 from models.hallucination import PrefilterResult
 from models.llm_response import LLMResponse
 from utils.text_utils import contains_any, is_profile_partial
@@ -37,13 +36,14 @@ CLAIMS = {
 }
 
 
-def get_risk_score(text : str)->float:
+def get_risk_score(text : str,triggers : list)->float:
     risk_score = 0.0
     if text != "":
-      for claim in claims:
-        terms  = claim["terms"]
+      for claim in CLAIMS:
+        terms  = CLAIMS[claim]["terms"]
         if contains_any(text, terms):
-            risk_score += claim["score"]
+            risk_score += CLAIMS[claim]["score"]
+            triggers.append(CLAIMS[claim]["tag"])
     return risk_score
 
 def skinnova_prefilter(
@@ -62,7 +62,7 @@ def skinnova_prefilter(
         risk_score += get_risk_score(llm_response.Data.UsageInstructions or "")
     else: 
         print("Routine mode not detected in prefilter.")
-        risk_score += get_risk_score(llm_response.Data.Response)      
+        risk_score += get_risk_score(llm_response.Data.Response,triggers)      
 
     risk_score = min(1.0, round(risk_score, 2))
 
