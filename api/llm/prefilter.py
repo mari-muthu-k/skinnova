@@ -11,7 +11,7 @@ CLAIMS = {
     "cure", "heal", "treat"],
     "score" : 0.4,
     "tag" : "medical_claim"
- }
+ },
 
 "ABSOLUTE_TERMS" : {
     "terms" : ["always", "guaranteed", "permanent",
@@ -19,14 +19,14 @@ CLAIMS = {
     "in days", "in 7 days", "in a week"],
     "score" : 0.2,
     "tag" : "absolute_claim"
- }
+ },
 
 "BRAND_NAMES" : {
     "terms" : ["cerave", "the ordinary", "neutrogena",
     "la roche", "olay", "clinique"],
     "score" : 0.3,
     "tag" : "brand_violation"
- }
+ },
 
 "RISKY_INGREDIENTS" : {
     "terms" : ["tretinoin", "isotretinoin",

@@ -13,7 +13,7 @@ async def llm_chat(payload: dict)->LLMResponse:
         llm_metrics.logging_event("chats.total",1)
         llm_response : LLMResponse = get_vertex_ai_message(res)
 
-        if llm_response.type == "error":
+        if llm_response.Type == "error":
                 llm_metrics.log_error("json_parsing_failure")
                 return llm_response
 
