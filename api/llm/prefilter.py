@@ -1,77 +1,75 @@
-import json
 from models.hallucination import PrefilterResult
-from utils.text_utils import contains_any, routine_generated_too_early
+from models.llm_response import LLMResponse
+from utils.text_utils import contains_any, is_profile_partial
 
-
-MEDICAL_TERMS = {
-    "diagnose", "diagnosis", "disease", "infection",
+CLAIMS = {
+ "MEDICAL_TERMS" : {
+    "terms" : ["diagnose", "diagnosis", "disease", "infection",
     "eczema", "psoriasis", "rosacea", "fungal",
     "bacterial", "prescription", "antibiotic",
-    "cure", "heal", "treat"
-}
+    "cure", "heal", "treat"],
+    "score" : 0.4,
+    "tag" : "medical_claim"
+ },
 
-ABSOLUTE_TERMS = {
-    "always", "guaranteed", "permanent",
+"ABSOLUTE_TERMS" : {
+    "terms" : ["always", "guaranteed", "permanent",
     "100%", "instantly", "overnight",
-    "in days", "in 7 days", "in a week"
+    "in days", "in 7 days", "in a week"],
+    "score" : 0.2,
+    "tag" : "absolute_claim"
+ },
+
+"BRAND_NAMES" : {
+    "terms" : ["cerave", "the ordinary", "neutrogena",
+    "la roche", "olay", "clinique"],
+    "score" : 0.3,
+    "tag" : "brand_violation"
+ },
+
+"RISKY_INGREDIENTS" : {
+    "terms" : ["tretinoin", "isotretinoin",
+    "hydroquinone", "high strength retinol"],
+    "score" : 0.4,
+    "tag" : "unsafe_ingredient"
+ }
 }
 
-BRAND_NAMES = {
-    "cerave", "the ordinary", "neutrogena",
-    "la roche", "olay", "clinique"
-}
 
-RISKY_INGREDIENTS = {
-    "tretinoin", "isotretinoin",
-    "hydroquinone", "high strength retinol"
-}
-
+def get_risk_score(text : str,triggers : list)->float:
+    risk_score = 0.0
+    if text != "":
+      for claim in CLAIMS:
+        terms  = CLAIMS[claim]["terms"]
+        if contains_any(text, terms):
+            risk_score += CLAIMS[claim]["score"]
+            triggers.append(CLAIMS[claim]["tag"])
+    return risk_score
 
 def skinnova_prefilter(
-    answer: str
+    llm_response : LLMResponse
 ) -> PrefilterResult:
     
-    ai_res = {}
     triggers = []
     risk_score = 0.0
-    text = answer.lower()
 
-    routine_mode = contains_any(text, {"morning_routine", "evening_routine", "night_routine"})
+    routine_mode = llm_response.Type == "routine"
     if routine_mode:
         print("Routine mode detected in prefilter.")
-        try:
-           ai_res = json.loads(answer)
-           if routine_generated_too_early(answer, ai_res.get("profile", {})):
-             triggers.append("premature_routine")
-             risk_score += 0.6
-        except Exception:
-            triggers.append("json_format_violation")
+        if is_profile_partial(llm_response.Data.Profile):
+            triggers.append("premature_routine")
             risk_score += 0.6
-
-    # R1: Medical overreach
-    if contains_any(text, MEDICAL_TERMS):
-        triggers.append("medical_claim")
-        risk_score += 0.4
-
-    # R2: Absolute / guaranteed claims
-    if contains_any(text, ABSOLUTE_TERMS):
-        triggers.append("absolute_claim")
-        risk_score += 0.2
-
-    # R3: Brand recommendations
-    if contains_any(text, BRAND_NAMES):
-        triggers.append("brand_violation")
-        risk_score += 0.3
-
-    # R4: Unsafe ingredient usage
-    if contains_any(text, RISKY_INGREDIENTS):
-        triggers.append("unsafe_ingredient")
-        risk_score += 0.4        
+        risk_score += get_risk_score(llm_response.Data.UsageInstructions or "")
+    else: 
+        print("Routine mode not detected in prefilter.")
+        risk_score += get_risk_score(llm_response.Data.Response,triggers)      
 
     risk_score = min(1.0, round(risk_score, 2))
 
     # Decision threshold (tuned for cost savings)
     should_evaluate = risk_score >= 0.25
+    if not should_evaluate:
+        triggers.append("safe")
 
     return PrefilterResult(
          should_evaluate=should_evaluate,
