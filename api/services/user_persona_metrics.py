@@ -28,9 +28,9 @@ class UserPersonaMetrics:
         
 
     def emit_persona_risk(self, user : User):
-     risk_weight = self.PERSONA_RISK_WEIGHTS.get(
-         user.skin_concern, 1.0
-     )
+     risk_weight = 0.0 
+     for concern in user.Concerns:
+         risk_weight += self.PERSONA_RISK_WEIGHTS.get(concern, 1.0)
 
      self.datadog_statsd.gauge(
         "llm.hallucination.persona_risk_weight",
