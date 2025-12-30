@@ -3,6 +3,15 @@ import { Send, Heart, MessageSquare } from "lucide-react";
 import landingPageImage from "../assets/landingpage.webp";
 import { useState } from "react";
 
+const handleKeyPress = (
+  e: React.KeyboardEvent<HTMLInputElement>,
+  handler: () => void
+): void => {
+  if (e.key === "Enter") {
+    handler();
+  }
+};
+
 interface LandingScreenProps {
   landingInput: string;
   setLandingInput: React.Dispatch<React.SetStateAction<string>>;
@@ -48,6 +57,9 @@ const LandingScreen: React.FC<LandingScreenProps> = ({ handleStartChat }) => {
             <input
               value={landingInput}
               onChange={(e) => setLandingInput(e.target.value)}
+              onKeyDown={(e) =>
+                handleKeyPress(e, () => handleStartChat(landingInput))
+              }
               type="text"
               placeholder="Type something..."
               className="bg-transparent outline-none w-full text-sm p-1"
