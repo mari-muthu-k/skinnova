@@ -36,6 +36,13 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: ./frontend
+          env:
+              NODE_ENV=${{ secrets.NODE_ENV }}
+              VITE_DD_APPLICATION_ID=${{ secrets.VITE_DD_APPLICATION_ID }}
+              VITE_DD_CLIENT_TOKEN=${{ secrets.VITE_DD_CLIENT_TOKEN }}
+              VITE_DD_SITE=${{ secrets.VITE_DD_SITE }}
+              VITE_DD_ENV=${{ secrets.VITE_DD_ENV }}
+              VITE_DD_SERVICE=${{ secrets.VITE_DD_SERVICE }}
           push: true
           platforms: linux/amd64
           no-cache: true
