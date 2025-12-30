@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import RoutineDisplay from "./RoutineDisplay";
 import type { Message, Profile, RoutineStep } from "../entities/types";
+import { datadogRum } from "@datadog/browser-rum";
 
 interface ChatBubbleProps extends Message {
   openModal: (step: RoutineStep, warnings: string[], profile: Profile) => void;
@@ -30,6 +31,10 @@ const ChatBubble: React.FC<ChatBubbleProps> = ({
       }
     } catch (err) {
       console.error("Failed to parse routine JSON", err);
+      datadogRum.addAction("routine_generation_failed", {
+        reason: "llm_timeout",
+        fallbackUsed: true,
+      });
     }
   }
   if (routinePayload) {
