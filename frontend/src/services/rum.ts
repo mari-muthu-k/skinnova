@@ -24,9 +24,4 @@ export const initDatadogRUM = () => {
       /https:\/\/your-backend-domain/,
     ],
   });
-  console.log("RUM ENV CHECK", {
-    appId: import.meta.env.VITE_DD_APPLICATION_ID,
-    token: import.meta.env.VITE_DD_CLIENT_TOKEN,
-    site: import.meta.env.VITE_DD_SITE,
-  });
 };
