@@ -1,6 +1,69 @@
-## Skinnova
+# Skinnova
+## Inspiration
 
-### Skinnova is a containerized full-stack skincare application built with:
+Skinnova was inspired by a simple but serious problem: **people increasingly rely on AI for skincare advice**, yet skincare guidance directly affects real human bodies. Unlike casual chatbots, incorrect or hallucinated skincare recommendations can lead to irritation, long-term skin damage, or loss of trust.
+
+While building AI-driven skincare experiences, we realized that **traditional LLM observability treats hallucinations as a binary correctness issue**, often evaluating every prompt uniformly. This approach is expensive, noisy, and fails to answer a more important question:
+
+> *If a hallucination occurs, how many users does it actually affect, and who are they?*
+
+This insight led us to design Skinnova not just as an AI skincare assistant, but as a **production-grade system where AI reliability, risk, and impact are observable**.
+
+## What We Built
+
+Skinnova is an AI-powered skincare assistant that:
+- Provides **personalized skincare routines**
+- Explains **ingredients and formulations**
+- Answers **skin concern–specific questions**
+- Tailors responses using **user attributes** such as age group, skin type, and skin concern
+
+On top of this user-facing functionality, we built a **novel LLM observability layer** focused on **selective hallucination evaluation and blast radius measurement**.
+
+## How We Built It
+### System architecture
+<img width="6580" height="3698" alt="Skinnova-datadog arch diagram" src="https://github.com/user-attachments/assets/d7365e5e-d2a9-47ba-8934-3b0ea24fae49" />
+
+- **Google Cloud**  
+  Used for LLM inference and backend infrastructure to ensure scalability and reliability.
+- **Python + FastAPI**  
+  Handles request orchestration, persona enrichment, and metric emission.
+- **Datadog**  
+  Used as the central observability platform for metrics, dashboards, alerts, and runbooks.
+
+### Selective Hallucination Evaluation
+
+Instead of evaluating hallucinations for every prompt, Skinnova introduces a **risk-based prefilter** that classifies prompts into low, medium, or high risk.
+
+Only high-risk prompts are evaluated for hallucination. Importantly, **the decision to evaluate is itself observable**.
+
+This allows us to track:
+- How often evaluation is triggered
+- Why it was triggered
+- How selective evaluation reduces cost and noise
+
+
+### Hallucination Blast Radius
+
+Detecting a hallucination alone is not enough. We wanted to understand **real-world impact**.
+
+We introduced the **Hallucination Blast Radius Index (HBRS)**, derived inside Datadog using observable signals:
+
+\[
+\text{HBRS}(t) =
+\text{HallucinationScore}(t)
+\times
+\text{ChatVolume}(t)
+\times
+\text{PersonaRiskWeight}
+\]
+
+Where:
+- Hallucination Score measures semantic deviation
+- Chat Volume represents real user exposure
+- Persona Risk Weight reflects sensitivity based on age group and skin concern
+
+By emitting **atomic metrics** and deriving impact dynamically, we keep the system transparent, tunable, and production-realistic.
+### Skinnova is built with:
 
 - FastAPI backend
 - React frontend
@@ -8,7 +71,7 @@
 - Datadog observability
 - Docker Compose orchestration
 
-Project structure:
+## Project structure:
 
 ```
 ├── api/ # Backend API (FastAPI)
@@ -24,6 +87,7 @@ Project structure:
 └── LICENSE
 
 ```
+
 
 ## Environment Configuration
 
