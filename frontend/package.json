@@ -12,6 +12,8 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@datadog/browser-rum": "^6.25.1",
+    "@datadog/browser-rum-react": "^6.25.1",
     "axios": "^1.13.2",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-jsx-a11y": "^6.10.2",
