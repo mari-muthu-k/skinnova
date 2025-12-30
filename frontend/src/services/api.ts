@@ -1,5 +1,6 @@
 import axios from "axios";
 import type { Message } from "../entities/types";
+import { datadogRum } from "@datadog/browser-rum";
 
 if (window.location.hostname === "localhost") {
   axios.defaults.baseURL = "http://localhost:8000/api/v1";
@@ -19,7 +20,13 @@ async function chatLLM(prompt: Message[]): Promise<string> {
     var langPrompt = {
       messages: prompt,
     };
+    const start = performance.now();
     const response = await api.post("/llm/chat", langPrompt);
+    datadogRum.addTiming("llm_time_to_first_token", performance.now() - start);
+    datadogRum.addAction("backend_api_called", {
+      endpoint: "/llm/chat",
+      method: "POST",
+    });
     if (response.status !== 200) {
       console.error("Error communicating with LLM API:", response.data);
       return Promise.reject("Something went wrong with LLM API");
@@ -30,6 +37,11 @@ async function chatLLM(prompt: Message[]): Promise<string> {
       return response.data.result;
     }
   } catch (error) {
+    datadogRum.addError(error, {
+      source: "chat_api",
+      endpoint: "/api/chat",
+      userAction: "send_message",
+    });
     console.error("Error communicating with LLM API:", error);
     throw error;
   }

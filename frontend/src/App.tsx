@@ -5,6 +5,7 @@ import ChatbotScreen from "./components/ChatbotScreen";
 import LandingScreen from "./components/LandingScreen";
 import RoutineDetailModal from "./components/RoutineDetailModal";
 import { chatLLM } from "./services/api";
+import { datadogRum } from "@datadog/browser-rum";
 
 const App: React.FC = () => {
   const [isChatting, setIsChatting] = useState<boolean>(false);
@@ -46,6 +47,11 @@ const App: React.FC = () => {
   };
 
   const sendMessage = (msg: string) => {
+    datadogRum.addAction("chat_message_sent", {
+      messageLength: msg.length,
+      containsRoutineRequest: msg.toLowerCase().includes("routine"),
+      timestamp: Date.now(),
+    });
     if (!msg.trim()) return;
 
     const userMsg: Message = {
@@ -61,9 +67,18 @@ const App: React.FC = () => {
     chatLLM(newMessages)
       .then((response) => {
         setMessages((prev) => [...prev, { role: "ai", content: response }]);
+        datadogRum.addAction("chat_response_received", {
+          responseLength: response.length,
+          responseType: "general_advice",
+        });
       })
       .catch((error) => {
         console.error("LLM chat error:", error);
+        datadogRum.addError("Error communicating with LLM API", {
+          source: "chat_api",
+          endpoint: "/api/chat",
+          userAction: "send_message",
+        });
         setMessages((prev) => [
           ...prev,
           {
