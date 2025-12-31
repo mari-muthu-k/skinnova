@@ -83,6 +83,7 @@ By emitting **atomic metrics** and deriving impact dynamically, we keep the syst
 ├── docker-compose.yml # Main Docker Compose file
 ├── docker-compose-local.yml # Local development compose file
 ├── env/ # Environment variable files
+├── tests/ # Traffic generator scripts
 ├── README.md
 └── LICENSE
 
