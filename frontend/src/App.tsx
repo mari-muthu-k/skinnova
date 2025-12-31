@@ -6,6 +6,7 @@ import LandingScreen from "./components/LandingScreen";
 import RoutineDetailModal from "./components/RoutineDetailModal";
 import { chatLLM } from "./services/api";
 import { datadogRum } from "@datadog/browser-rum";
+import logoSVG from "./assets/logo.svg";
 
 const App: React.FC = () => {
   const [isChatting, setIsChatting] = useState<boolean>(false);
@@ -27,6 +28,11 @@ const App: React.FC = () => {
       chatRef.current.scrollTop = chatRef.current.scrollHeight;
     }
   }, [messages]);
+
+  useEffect(() => {
+    var ele = '<link rel="icon" href="' + logoSVG + '" sizes="any" type="image/svg+xml">';
+    document.head.insertAdjacentHTML("beforeend", ele);
+  },[]);
 
   const openModal = (
     stepData: RoutineStep,
@@ -67,10 +73,12 @@ const App: React.FC = () => {
     chatLLM(newMessages)
       .then((response) => {
         setMessages((prev) => [...prev, { role: "ai", content: response }]);
-        datadogRum.addAction("chat_response_received", {
-          responseLength: response.length,
-          responseType: "general_advice",
-        });
+        if (typeof response === "string") {          
+          datadogRum.addAction("chat_response_received", {
+            responseLength: response.length,
+            responseType: "general_advice",
+          });
+        }
       })
       .catch((error) => {
         console.error("LLM chat error:", error);

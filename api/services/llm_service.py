@@ -15,6 +15,7 @@ async def llm_chat(payload: dict)->LLMResponse:
 
         if llm_response.Type == "error":
                 llm_metrics.log_error("json_parsing_failure")
+                llm_metrics.logging_event("hallucination.score",1)
                 return llm_response
 
         try: 

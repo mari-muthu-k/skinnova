@@ -131,7 +131,7 @@ def skinnova_prefilter(
         if is_profile_partial(llm_response.Data.Profile):
             triggers.append("premature_routine")
             risk_score += 0.6
-        risk_score += get_risk_score(llm_response.Data.UsageInstructions or "")
+        risk_score += get_risk_score(llm_response.Data.UsageInstructions or "",triggers=triggers)
     else: 
         print("Routine mode not detected in prefilter.")
         risk_score += get_risk_score(llm_response.Data.Response,triggers)      
