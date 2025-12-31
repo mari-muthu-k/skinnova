@@ -51,7 +51,7 @@ async def main():
         tasks = [send_request(client, mode="normal") for _ in range(10)]
         await asyncio.gather(*tasks)
 
-    print("\n🏁 Traffic generation complete. Check your Datadog Dashboard!")
+    print("\nTraffic generation complete. Check your Datadog Dashboard!")
 
 if __name__ == "__main__":
     asyncio.run(main())
