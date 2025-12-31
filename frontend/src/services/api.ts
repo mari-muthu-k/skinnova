@@ -1,5 +1,5 @@
 import axios from "axios";
-import type { Message } from "../entities/types";
+import type { Message, RoutineContent } from "../entities/types";
 import { datadogRum } from "@datadog/browser-rum";
 
 if (window.location.hostname === "localhost") {
@@ -15,7 +15,7 @@ const api = axios.create({
   },
 });
 
-async function chatLLM(prompt: Message[]): Promise<string> {
+async function chatLLM(prompt: Message[]): Promise<string|RoutineContent> {
   try {
     var langPrompt = {
       messages: prompt,

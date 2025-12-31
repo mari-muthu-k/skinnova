@@ -1,7 +1,6 @@
 import { motion } from "framer-motion";
 import RoutineDisplay from "./RoutineDisplay";
 import type { Message, Profile, RoutineStep } from "../entities/types";
-import { datadogRum } from "@datadog/browser-rum";
 
 interface ChatBubbleProps extends Message {
   openModal: (step: RoutineStep, warnings: string[], profile: Profile) => void;
@@ -15,35 +14,16 @@ const ChatBubble: React.FC<ChatBubbleProps> = ({
   const isUser = role === "human";
 
   const contentStr = content?.toString() || "";
-
   const textPart = contentStr.split("```json")[0].trim();
-
-  let routinePayload: any = null;
   let normalizedRoutine: any = null;
 
-  const jsonMatch = contentStr.match(/```json\s*([\s\S]*?)\s*```/);
-
-  if (jsonMatch?.[1]) {
-    try {
-      const parsed = JSON.parse(jsonMatch[1]);
-      if (parsed?.type === "routine") {
-        routinePayload = parsed;
-      }
-    } catch (err) {
-      console.error("Failed to parse routine JSON", err);
-      datadogRum.addAction("routine_generation_failed", {
-        reason: "llm_timeout",
-        fallbackUsed: true,
-      });
-    }
-  }
-  if (routinePayload) {
+  if (typeof content === "object" && content?.type === "routine") {
     normalizedRoutine = {
-      profile: routinePayload.data.profile,
-      warnings: routinePayload.warnings || [],
-      morning_routine: routinePayload.morning_routine || [],
-      evening_routine: routinePayload.evening_routine || [],
-      night_routine: routinePayload.night_routine || [],
+      profile: content.data.profile,
+      warnings: content.data.warnings || [],
+      morning_routine: content.data.morning_routine || [],
+      evening_routine: content.data.evening_routine || [],
+      night_routine: content.data.night_routine || [],
     };
   }
 
@@ -64,7 +44,7 @@ const ChatBubble: React.FC<ChatBubbleProps> = ({
 
   return (
     <>
-      {textPart && (
+      {(textPart && !normalizedRoutine) && (
         <motion.div
           layout
           initial={{ opacity: 0, scale: 0.8 }}
@@ -83,7 +63,7 @@ const ChatBubble: React.FC<ChatBubbleProps> = ({
         </motion.div>
       )}
 
-      {routinePayload && (
+      {normalizedRoutine && (
         <RoutineDisplay routine={normalizedRoutine} openModal={openModal} />
       )}
     </>

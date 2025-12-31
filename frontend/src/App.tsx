@@ -67,10 +67,12 @@ const App: React.FC = () => {
     chatLLM(newMessages)
       .then((response) => {
         setMessages((prev) => [...prev, { role: "ai", content: response }]);
-        datadogRum.addAction("chat_response_received", {
-          responseLength: response.length,
-          responseType: "general_advice",
-        });
+        if (typeof response === "string") {          
+          datadogRum.addAction("chat_response_received", {
+            responseLength: response.length,
+            responseType: "general_advice",
+          });
+        }
       })
       .catch((error) => {
         console.error("LLM chat error:", error);
