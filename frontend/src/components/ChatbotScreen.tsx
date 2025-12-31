@@ -2,7 +2,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Send, Loader2 } from "lucide-react";
 import ChatBubble from "./ChatBubble";
 import TypingIndicator from "./TypingIndicator";
-import logo from "../assets/logo.svg";
 import type { Message, Profile, RoutineStep } from "../entities/types";
 
 const handleKeyPress = (
@@ -41,7 +40,10 @@ const ChatbotScreen: React.FC<ChatbotScreenProps> = ({
       className="flex flex-col h-full overflow-hidden"
     >
       <div className="p-4 flex justify-center items-center border-b bg-white shadow-sm">
-        <img src={logo} alt="Skinnova" className="h-12 w-auto" />
+        <div className="flex flex-col items-center">
+          <p className="text-sm font-semibold text-gray-800">Skinnova AI</p>
+          <p className="text-xs text-gray-500">Online</p>
+        </div>
       </div>
 
       <div

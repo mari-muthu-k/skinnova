@@ -58,7 +58,7 @@ const ChatBubble: React.FC<ChatBubbleProps> = ({
     </div>
   ) : (
     <div className="w-8 h-8 rounded-full bg-rose-300 flex items-center justify-center text-sm font-semibold">
-      AI
+      S
     </div>
   );
 
