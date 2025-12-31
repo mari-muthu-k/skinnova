@@ -16,7 +16,7 @@ async def send_request(client, mode="normal"):
     payload = {
         "messages": [random.choice(SCENARIOS)]
     }
-    print (f"➡️ Sending request in '{mode}' mode with payload: {payload}")
+    print (f"Sending request in '{mode}' mode with payload: {payload}")
     headers = {
         "Content-Type": "application/json",
         "X-Simulation-Mode": mode 

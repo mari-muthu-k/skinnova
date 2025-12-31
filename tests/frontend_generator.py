@@ -15,7 +15,7 @@ async def run_user_session(browser, user_id):
     context = await browser.new_context()
     page = await context.new_page()
     
-    print(f"👤 User {user_id}: Opening Skinnova...")
+    print(f"User {user_id}: Opening Skinnova...")
     try:
         await page.goto(APP_URL, wait_until="networkidle")
         
@@ -26,7 +26,7 @@ async def run_user_session(browser, user_id):
         
         start_btn = page.get_by_role("button", name="Start chat")
         await start_btn.click(force=True)
-        print(f"   User {user_id}: Entered Chatroom")
+        print(f"User {user_id}: Entered Chatroom")
 
         
         for i in range(0,3):
@@ -36,7 +36,7 @@ async def run_user_session(browser, user_id):
             await chat_input.wait_for(state="visible", timeout=5000)
             
             message = SCENARIOS[i]
-            print(f"   User {user_id} message {i+1}: {message}")
+            print(f"User {user_id} message {i+1}: {message}")
             
             await chat_input.fill(message)
             await page.keyboard.press("Enter")
