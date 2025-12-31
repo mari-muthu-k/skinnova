@@ -1,7 +1,7 @@
 import os
 from llm import LLM
 from models.hallucination import HallucinationResult
-import json
+from utils.json import safe_json_loads
 
 class HallucinationDetector:
     def __init__(self):
@@ -21,7 +21,7 @@ class HallucinationDetector:
          llm_response = self.llm.chat_model.generate_content( prompt)
          print(f"LLM raw response for hallucination detection: {llm_response.text}")
 
-         res_dict = json.loads(llm_response.text)
+         res_dict = safe_json_loads(llm_response.text)
          hallucination_score = float(res_dict.get("hallucination_score", 0.0))
          reason = res_dict.get("reason", "")
          category = res_dict.get("category", "")

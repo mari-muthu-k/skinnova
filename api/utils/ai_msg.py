@@ -1,4 +1,4 @@
-import json
+from utils.json import safe_json_loads
 from models.llm_response import LLMResponse
 from vertexai.generative_models import GenerationResponse
 
@@ -14,7 +14,7 @@ def get_last_ai_message(res:dict)->str:
 
 def get_vertex_ai_message(res:GenerationResponse)->LLMResponse:
         try : 
-          resDict = json.loads(res.text)
+          resDict = safe_json_loads(res.text)
           llmRes = LLMResponse(**resDict)
           return llmRes
         except Exception as e:
