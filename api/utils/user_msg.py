@@ -1,7 +1,6 @@
 
 
 def get_recent_user_message(res:dict)->list:
-        print(res)
         msgs = res['messages']
         user_msgs = []
         for msg in reversed(msgs):
